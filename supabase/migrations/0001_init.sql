@@ -80,6 +80,22 @@ $$ select id from members where auth_user_id = auth.uid() $$;
 create function is_admin() returns boolean language sql stable security definer set search_path = public as
 $$ select exists (select 1 from members where auth_user_id = auth.uid() and role = 'admin') $$;
 
+create or replace function claim_member(p_member_id uuid) returns void
+language plpgsql security definer set search_path = public as $$
+declare
+  v_user_id uuid := auth.uid();
+begin
+  if v_user_id is null then
+    raise exception 'No autenticado';
+  end if;
+  update members set auth_user_id = v_user_id where id = p_member_id and auth_user_id is null;
+  if not found then
+    raise exception 'Miembro no disponible o ya reclamado';
+  end if;
+end $$;
+
+grant execute on function claim_member(uuid) to authenticated;
+
 -- ---------- Operaciones del administrador (transaccionales e idempotentes) ----------
 create function approve_payment(p_payment_id uuid) returns void
 language plpgsql security definer set search_path = public as $$

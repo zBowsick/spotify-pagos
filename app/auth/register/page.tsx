@@ -29,17 +29,24 @@ export default function RegisterPage() {
     if (!selectedMember) { setError('Selecciona quién eres'); return; }
     setError(null);
     setSubmitting(true);
-    
+
     const sb = getSupabaseBrowser();
     const { data, error: authErr } = await sb.auth.signUp({ email, password });
-    
+
     if (authErr) { setError(authErr.message); setSubmitting(false); return; }
-    
+
+    // Esperar a que la sesión se establezca
+    await new Promise(r => setTimeout(r, 500));
+
     // Vincular cuenta
     const { error: claimErr } = await sb.rpc('claim_member', { p_member_id: selectedMember });
-    
-    if (claimErr) { setError('Registro exitoso, pero fallo al vincular: ' + claimErr.message); setSubmitting(false); }
-    else { window.location.href = '/dashboard'; }
+
+    if (claimErr) {
+      setError('Registro exitoso, pero fallo al vincular: ' + claimErr.message);
+      setSubmitting(false);
+    } else {
+      window.location.href = '/dashboard';
+    }
   }
 
   if (loading) return <Loading />;
