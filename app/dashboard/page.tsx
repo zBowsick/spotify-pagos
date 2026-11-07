@@ -106,7 +106,7 @@ export default function MemberDashboard() {
   if (error) return <Alert variant="error">{error}</Alert>;
   if (!data) return null;
 
-  const { member, payments_sent, coverage, allocations_received } = data;
+  const { member, payments_sent = [], coverage = [], allocations_received = [] } = data || {};
 
   // Determine status
   const today = new Date();

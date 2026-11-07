@@ -182,7 +182,11 @@ export default function AdminDashboard() {
   if (error) return <Alert variant="error">{error}</Alert>;
   if (!data) return null;
 
-  const { settings, members, payments, pending_receipts, coverage } = data;
+  const settings = data.settings || {};
+  const members = data.members || [];
+  const payments = data.payments || [];
+  const pending_receipts = data.pending_receipts || 0;
+  const coverage = data.coverage || [];
 
   // Member status calculation
   const coveredByMember = new Map<string, Set<string>>();
@@ -369,8 +373,8 @@ export default function AdminDashboard() {
                     <Td>{p.reviewer_name || '—'}</Td>
                     <Td>{p.unassigned_cop > 0 ? formatCOP(p.unassigned_cop) : '—'}</Td>
                     <Td>
-                      {p.allocations.map(a => (
-                        <Badge key={`${a.beneficiaryId}-${a.months}`} variant="neutral" className="mr-1 mb-1">{a.beneficiaryId}: {a.months}m</Badge>
+                      {(p.allocations || []).map((a, idx) => (
+                        <Badge key={`${a.beneficiaryId}-${a.months}-${idx}`} variant="neutral" className="mr-1 mb-1">{a.beneficiaryId}: {a.months}m</Badge>
                       ))}
                     </Td>
                     <Td>

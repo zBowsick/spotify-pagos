@@ -81,7 +81,7 @@ select json_build_object(
   'payments', (
     select json_agg(p order by p.submitted_at desc)
     from (
-      select pd.*, json_agg(json_build_object('beneficiaryId', pa.beneficiary_id, 'months', pa.months)) as allocations
+      select pd.*, coalesce(json_agg(json_build_object('beneficiaryId', pa.beneficiary_id, 'months', pa.months)), '[]'::json) as allocations
       from payment_detail pd
       left join payment_allocations pa on pa.payment_id = pd.id
       group by pd.*
@@ -111,7 +111,7 @@ select json_build_object(
   'payments_sent', (
     select coalesce(json_agg(p order by p.submitted_at desc), '[]'::json)
     from (
-      select pd.*, json_agg(json_build_object('beneficiaryId', pa.beneficiary_id, 'months', pa.months)) as allocations
+      select pd.*, coalesce(json_agg(json_build_object('beneficiaryId', pa.beneficiary_id, 'months', pa.months)), '[]'::json) as allocations
       from payment_detail pd
       left join payment_allocations pa on pa.payment_id = pd.id
       where pd.payer_id = p_member_id
@@ -130,7 +130,7 @@ select json_build_object(
   'allocations_received', (
     select coalesce(json_agg(p order by p.submitted_at desc), '[]'::json)
     from (
-      select pd.*, json_agg(json_build_object('beneficiaryId', pa.beneficiary_id, 'months', pa.months)) as allocations
+      select pd.*, coalesce(json_agg(json_build_object('beneficiaryId', pa.beneficiary_id, 'months', pa.months)), '[]'::json) as allocations
       from payment_detail pd
       left join payment_allocations pa on pa.payment_id = pd.id
       where pd.id in (select payment_id from payment_allocations where beneficiary_id = p_member_id)
