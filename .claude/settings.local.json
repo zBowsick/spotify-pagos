@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(head -50)",
+      "PowerShell(node --version)",
+      "PowerShell(npm --version)",
+      "PowerShell(python3 --version)",
+      "PowerShell(python --version)",
+      "PowerShell(php --version)",
+      "PowerShell(head -1)",
+      "PowerShell(npm view next version 2>&1)",
+      "PowerShell(Test-NetConnection -ComputerName registry.npmjs.org -Port 443 -InformationLevel Quiet 2>&1)",
+      "PowerShell(New-Item -ItemType Directory -Force -Path src/domain)",
+      "PowerShell(Move-Item -Force ledger.ts src/domain/ledger.ts)",
+      "PowerShell(Move-Item -Force ledger.test.ts src/domain/ledger.test.ts)",
+      "PowerShell(Move-Item -Force -Path supabase -Destination supabase -ErrorAction SilentlyContinue)",
+      "PowerShell(New-Item -ItemType Directory -Force -Path supabase/migrations)",
+      "PowerShell(Move-Item -Force 0001_init.sql supabase/migrations/0001_init.sql)",
+      "PowerShell(cd C:\\\\Users\\\\felib\\\\Desktop\\\\spotify; Get-ChildItem -Recurse -File | Where-Object { $_.FullName -notmatch 'node_modules|\\\\.next|\\\\.git' } | Select-Object FullName, Length | Sort-Object FullName)",
+      "PowerShell($env:PATH = \"C:\\\\Program Files\\\\Git\\\\cmd;C:\\\\Program Files\\\\Git\\\\bin;$env:PATH\"; cd C:\\\\Users\\\\felib\\\\Desktop\\\\spotify; git status 2>&1)",
+      "PowerShell($env:PATH = \"C:\\\\Program Files\\\\Git\\\\cmd;C:\\\\Program Files\\\\Git\\\\bin;$env:PATH\"; cd C:\\\\Users\\\\felib\\\\Desktop\\\\spotify; git status --short 2>&1 | Select-Object -First 5; echo \"---TOTAL FILES STAGED---\"; git status --short 2>&1 | Measure-Object -Line | Select-Object Lines)",
+      "PowerShell($env:PATH = \"C:\\\\Program Files\\\\Git\\\\cmd;C:\\\\Program Files\\\\Git\\\\bin;$env:PATH\"; cd C:\\\\Users\\\\felib\\\\Desktop\\\\spotify; git add .gitignore; git rm -r --cached . 2>&1 | Select-Object -Last 3; echo \"---CLEANING---\"; git clean -fd 2>&1 | Select-Object -Last 5)",
+      "PowerShell($env:PATH = \"C:\\\\Program Files\\\\Git\\\\cmd;C:\\\\Program Files\\\\Git\\\\bin;$env:PATH\"; cd C:\\\\Users\\\\felib\\\\Desktop\\\\spotify; git status --short 2>&1 | Measure-Object -Line | Select-Object Lines; echo \"---\"; Get-ChildItem -Recurse -File | Where-Object { $_.FullName -notmatch 'node_modules|\\\\.next' } | Measure-Object -Line | Select-Object Lines)",
+      "PowerShell($env:PATH = \"C:\\\\Program Files\\\\Git\\\\cmd;C:\\\\Program Files\\\\Git\\\\bin;$env:PATH\"; cd C:\\\\Users\\\\felib\\\\Desktop\\\\spotify; git rm -rf --cached --quiet . 2>&1 | Select-Object -Last 3; echo \"EXIT: $?\"; git status --short 2>&1 | Measure-Object -Line | Select-Object Lines)",
+      "PowerShell($env:PATH = \"C:\\\\Program Files\\\\Git\\\\cmd;C:\\\\Program Files\\\\Git\\\\bin;$env:PATH\"; cd C:\\\\Users\\\\felib\\\\Desktop\\\\spotify; git status --short 2>&1)",
+      "PowerShell($env:PATH = \"C:\\\\Program Files\\\\Git\\\\cmd;C:\\\\Program Files\\\\Git\\\\bin;$env:PATH\"; cd C:\\\\Users\\\\felib\\\\Desktop\\\\spotify; git add .; git commit -m \"feat: Spotify Compartido - control de pagos completo\" 2>&1 | Select-Object -First 10; echo \"---\"; git log --oneline -3 2>&1)",
+      "PowerShell($env:PATH = \"C:\\\\Program Files\\\\Git\\\\cmd;C:\\\\Program Files\\\\Git\\\\bin;$env:PATH\"; cd C:\\\\Users\\\\felib\\\\Desktop\\\\spotify; git config user.email \"david@example.com\"; git config user.name \"David\"; git add .; git commit -m \"feat: Spotify Compartido - control de pagos completo\" 2>&1 | Select-Object -First 5; echo \"---\"; git log --oneline -1 2>&1)"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Spotify Compartido",
+  "short_name": "Spotify Pagos",
+  "description": "Control de pagos y coberturas para el plan familiar de Spotify",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fafafa",
+  "theme_color": "#5747e6",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
