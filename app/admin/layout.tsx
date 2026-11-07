@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 export const dynamic = 'force-dynamic';
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const sb = getSupabaseServer();
+  const sb = await getSupabaseServer();
   const { data: { user } } = await sb.auth.getUser();
   if (!user) redirect('/auth/login');
 
@@ -19,7 +19,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <nav className="flex items-center gap-4">
             <span className="text-sm text-muted">{member.name} (Admin)</span>
             <a href="/dashboard" className="btn btn-ghost text-sm">Ver como miembro</a>
-            <form action={async () => { 'use server'; const sb = getSupabaseServer(); await sb.auth.signOut(); }} method="POST">
+            <form action={async () => { 'use server'; const sb = await getSupabaseServer(); await sb.auth.signOut(); }} method="POST">
               <button type="submit" className="btn btn-ghost text-sm">Salir</button>
             </form>
           </nav>

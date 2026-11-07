@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 export const dynamic = 'force-dynamic';
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const sb = getSupabaseServer();
+  const sb = await getSupabaseServer();
   const { data: { user } } = await sb.auth.getUser();
   if (!user) redirect('/auth/login');
 
@@ -20,7 +20,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
           <h1 className="text-xl font-semibold">Spotify Compartido</h1>
           <nav className="flex items-center gap-4">
             <span className="text-sm text-muted">{member.name}</span>
-            <form action={async () => { 'use server'; const sb = getSupabaseServer(); await sb.auth.signOut(); }} method="POST">
+            <form action={async () => { 'use server'; const sb = await getSupabaseServer(); await sb.auth.signOut(); }} method="POST">
               <button type="submit" className="btn btn-ghost text-sm">Salir</button>
             </form>
           </nav>

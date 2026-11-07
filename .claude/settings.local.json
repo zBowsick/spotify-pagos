@@ -24,7 +24,13 @@
       "PowerShell($env:PATH = \"C:\\\\Program Files\\\\Git\\\\cmd;C:\\\\Program Files\\\\Git\\\\bin;$env:PATH\"; cd C:\\\\Users\\\\felib\\\\Desktop\\\\spotify; git rm -rf --cached --quiet . 2>&1 | Select-Object -Last 3; echo \"EXIT: $?\"; git status --short 2>&1 | Measure-Object -Line | Select-Object Lines)",
       "PowerShell($env:PATH = \"C:\\\\Program Files\\\\Git\\\\cmd;C:\\\\Program Files\\\\Git\\\\bin;$env:PATH\"; cd C:\\\\Users\\\\felib\\\\Desktop\\\\spotify; git status --short 2>&1)",
       "PowerShell($env:PATH = \"C:\\\\Program Files\\\\Git\\\\cmd;C:\\\\Program Files\\\\Git\\\\bin;$env:PATH\"; cd C:\\\\Users\\\\felib\\\\Desktop\\\\spotify; git add .; git commit -m \"feat: Spotify Compartido - control de pagos completo\" 2>&1 | Select-Object -First 10; echo \"---\"; git log --oneline -3 2>&1)",
-      "PowerShell($env:PATH = \"C:\\\\Program Files\\\\Git\\\\cmd;C:\\\\Program Files\\\\Git\\\\bin;$env:PATH\"; cd C:\\\\Users\\\\felib\\\\Desktop\\\\spotify; git config user.email \"david@example.com\"; git config user.name \"David\"; git add .; git commit -m \"feat: Spotify Compartido - control de pagos completo\" 2>&1 | Select-Object -First 5; echo \"---\"; git log --oneline -1 2>&1)"
+      "PowerShell($env:PATH = \"C:\\\\Program Files\\\\Git\\\\cmd;C:\\\\Program Files\\\\Git\\\\bin;$env:PATH\"; cd C:\\\\Users\\\\felib\\\\Desktop\\\\spotify; git config user.email \"david@example.com\"; git config user.name \"David\"; git add .; git commit -m \"feat: Spotify Compartido - control de pagos completo\" 2>&1 | Select-Object -First 5; echo \"---\"; git log --oneline -1 2>&1)",
+      "PowerShell($env:PATH = \"C:\\\\Program Files\\\\Git\\\\cmd;C:\\\\Program Files\\\\Git\\\\bin;$env:PATH\"; cd C:\\\\Users\\\\felib\\\\Desktop\\\\spotify; git add supabase/migrations/0002_receipts_and_views.sql; git commit -m \"fix: vista member_coverage_summary usa period en vez de id\" 2>&1; git push origin main 2>&1)",
+      "PowerShell($env:PATH = \"C:\\\\Program Files\\\\Git\\\\cmd;C:\\\\Program Files\\\\Git\\\\bin;$env:PATH\"; cd C:\\\\Users\\\\felib\\\\Desktop\\\\spotify; git remote -v)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(node -e ' *)"
     ]
   }
 }

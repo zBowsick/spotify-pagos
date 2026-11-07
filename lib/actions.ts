@@ -41,14 +41,14 @@ const SettingsSchema = z.object({
 
 // ---------- Helpers ----------
 async function getUserId() {
-  const sb = getSupabaseServer();
+  const sb = await getSupabaseServer();
   const { data: { user } } = await sb.auth.getUser();
   if (!user) throw new Error('No autenticado');
   return user.id;
 }
 
 async function requireAdmin() {
-  const sb = getSupabaseServer();
+  const sb = await getSupabaseServer();
   const { data: { user } } = await sb.auth.getUser();
   if (!user) throw new Error('No autenticado');
   const { data, error } = await sb.rpc('is_admin');
@@ -57,7 +57,7 @@ async function requireAdmin() {
 
 // ---------- Pagos ----------
 export async function submitPayment(formData: FormData) {
-  const sb = getSupabaseServer();
+  const sb = await getSupabaseServer();
   const userId = await getUserId();
   const { data: member } = await sb.from('members').select('id').eq('auth_user_id', userId).single();
   if (!member) throw new Error('No eres integrante');
@@ -98,7 +98,7 @@ export async function submitPayment(formData: FormData) {
 
 export async function approvePayment(paymentId: string) {
   await requireAdmin();
-  const sb = getSupabaseServer();
+  const sb = await getSupabaseServer();
   const { error } = await sb.rpc('approve_payment', { p_payment_id: paymentId });
   if (error) throw new Error(error.message);
   revalidatePath('/dashboard');
@@ -114,7 +114,7 @@ export async function rejectPayment(formData: FormData) {
   });
   if (!parsed.success) throw new Error(parsed.error.errors.map(e => e.message).join(', '));
 
-  const sb = getSupabaseServer();
+  const sb = await getSupabaseServer();
   const { error } = await sb.rpc('reject_payment', { p_payment_id: parsed.data.paymentId, p_reason: parsed.data.reason });
   if (error) throw new Error(error.message);
   revalidatePath('/dashboard');
@@ -130,7 +130,7 @@ export async function reversePayment(formData: FormData) {
   });
   if (!parsed.success) throw new Error(parsed.error.errors.map(e => e.message).join(', '));
 
-  const sb = getSupabaseServer();
+  const sb = await getSupabaseServer();
   const { error } = await sb.rpc('reverse_payment', { p_payment_id: parsed.data.paymentId, p_reason: parsed.data.reason });
   if (error) throw new Error(error.message);
   revalidatePath('/dashboard');
@@ -140,7 +140,7 @@ export async function reversePayment(formData: FormData) {
 
 // ---------- Comprobantes ----------
 export async function uploadReceipt(formData: FormData) {
-  const sb = getSupabaseServer();
+  const sb = await getSupabaseServer();
   const userId = await getUserId();
   const { data: member } = await sb.from('members').select('id').eq('auth_user_id', userId).single();
   if (!member) throw new Error('No eres integrante');
@@ -179,7 +179,7 @@ export async function uploadReceipt(formData: FormData) {
 }
 
 export async function getReceiptUrl(storagePath: string) {
-  const sb = getSupabaseServer();
+  const sb = await getSupabaseServer();
   const { data } = await sb.storage.from('receipts').createSignedUrl(storagePath, 60 * 60); // 1 hora
   return data?.signedUrl ?? null;
 }
@@ -193,7 +193,7 @@ export async function setMemberStartMonth(formData: FormData) {
   });
   if (!parsed.success) throw new Error(parsed.error.errors.map(e => e.message).join(', '));
 
-  const sb = getSupabaseServer();
+  const sb = await getSupabaseServer();
   const { error } = await sb.from('members').update({ start_month: parsed.data.startMonth })
     .eq('id', parsed.data.memberId);
   if (error) throw new Error(error.message);
@@ -203,7 +203,7 @@ export async function setMemberStartMonth(formData: FormData) {
 
 export async function linkMemberAuth(memberId: string, authUserId: string) {
   await requireAdmin();
-  const sb = getSupabaseServer();
+  const sb = await getSupabaseServer();
   const { error } = await sb.from('members').update({ auth_user_id: authUserId }).eq('id', memberId);
   if (error) throw new Error(error.message);
   revalidatePath('/admin');
@@ -218,7 +218,7 @@ export async function updateSettings(formData: FormData) {
   });
   if (!parsed.success) throw new Error(parsed.error.errors.map(e => e.message).join(', '));
 
-  const sb = getSupabaseServer();
+  const sb = await getSupabaseServer();
   const { error } = await sb.from('settings').update({ monthly_price_cop: parsed.data.monthlyPrice }).eq('id', true);
   if (error) throw new Error(error.message);
   revalidatePath('/admin');
@@ -228,14 +228,14 @@ export async function updateSettings(formData: FormData) {
 // ---------- Consultas ----------
 export async function getAdminDashboard() {
   await requireAdmin();
-  const sb = getSupabaseServer();
+  const sb = await getSupabaseServer();
   const { data, error } = await sb.rpc('admin_dashboard');
   if (error) throw new Error(error.message);
   return data;
 }
 
 export async function getMemberDashboard() {
-  const sb = getSupabaseServer();
+  const sb = await getSupabaseServer();
   const userId = await getUserId();
   const { data: member } = await sb.from('members').select('id').eq('auth_user_id', userId).single();
   if (!member) throw new Error('No eres integrante');
@@ -245,21 +245,21 @@ export async function getMemberDashboard() {
 }
 
 export async function getSettings() {
-  const sb = getSupabaseServer();
+  const sb = await getSupabaseServer();
   const { data, error } = await sb.from('settings').select('*').eq('id', true).single();
   if (error) throw new Error(error.message);
   return data;
 }
 
 export async function getMembers() {
-  const sb = getSupabaseServer();
+  const sb = await getSupabaseServer();
   const { data, error } = await sb.from('members').select('id, name, role, start_month, auth_user_id').order('name');
   if (error) throw new Error(error.message);
   return data;
 }
 
 export async function getCurrentMember() {
-  const sb = getSupabaseServer();
+  const sb = await getSupabaseServer();
   const userId = await getUserId();
   const { data, error } = await sb.from('members').select('id, name, role, start_month').eq('auth_user_id', userId).single();
   if (error) return null;
