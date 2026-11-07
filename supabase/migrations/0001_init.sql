@@ -151,7 +151,10 @@ alter table coverage_periods enable row level security;
 alter table audit_log enable row level security;
 
 create policy members_read on members for select to authenticated using (is_admin() or id = current_member_id());
+create policy members_read_unclaimed on members for select to anon using (auth_user_id is null);
 create policy members_admin_write on members for all to authenticated using (is_admin()) with check (is_admin());
+
+grant select on members to anon;
 create policy settings_read on settings for select to authenticated using (true);
 create policy settings_admin_write on settings for update to authenticated using (is_admin()) with check (is_admin());
 
