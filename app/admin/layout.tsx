@@ -1,4 +1,4 @@
-import { getSupabaseServer } from '@/lib/supabase';
+import { getSupabaseServer } from "@/lib/supabase-server";
 import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';

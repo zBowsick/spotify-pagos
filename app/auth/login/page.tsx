@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
-import { getSupabaseBrowser } from '@/lib/supabase';
+import { getSupabaseBrowser } from "@/lib/supabase";
 
 export default function LoginPage() {
   return (
