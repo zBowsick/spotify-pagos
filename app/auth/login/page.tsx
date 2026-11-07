@@ -1,8 +1,7 @@
 'use client';
 
-import { useState, FormEvent, Suspense } from 'react';
+import { useState, FormEvent } from 'react';
 import { getSupabaseBrowser } from '@/lib/supabase';
-import { redirect } from 'next/navigation';
 
 export default function LoginPage() {
   return (
@@ -35,7 +34,7 @@ function LoginForm() {
       setError(error.message);
       return;
     }
-    redirect('/dashboard');
+    window.location.href = '/dashboard';
   }
 
   async function handleMagicLink(e: FormEvent) {
