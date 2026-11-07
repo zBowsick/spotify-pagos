@@ -31,9 +31,9 @@ select
   m.name,
   m.role,
   m.start_month,
-  coalesce(sum(c.months), 0)::int as months_covered,
-  count(c.id) filter (where c.revoked_at is null) as active_periods,
-  max(c.period) filter (where c.revoked_at is null) as covered_through
+  coalesce(count(c.period), 0)::int as months_covered,
+  count(c.period) as active_periods,
+  max(c.period) as covered_through
 from members m
 left join (
   select cp.member_id, cp.period, cp.payment_id
