@@ -28,12 +28,14 @@ function LoginForm() {
     setError(null);
     setLoading(true);
     const sb = getSupabaseBrowser();
-    const { error } = await sb.auth.signInWithPassword({ email, password });
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
     setLoading(false);
     if (error) {
       setError(error.message);
       return;
     }
+    // Esperar a que las cookies se guarden antes de redirigir
+    await new Promise(r => setTimeout(r, 800));
     window.location.href = '/dashboard';
   }
 
@@ -67,6 +69,9 @@ function LoginForm() {
       <button type="button" className="btn btn-secondary w-full" onClick={handleMagicLink} disabled={loading || !email}>
         Enviar enlace mágico
       </button>
+      <div className="text-center text-sm">
+        <a href="/auth/register" className="text-brand hover:underline">¿No tienes cuenta? Regístrate aquí</a>
+      </div>
     </form>
   );
 }
