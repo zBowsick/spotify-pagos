@@ -10,11 +10,20 @@ export async function getSupabaseServer(): Promise<SupabaseClient> {
 
   return createServerClient(url, key, {
     cookies: {
-      getAll() { return cookieStore.getAll(); },
-      setAll(cookiesToSet: Array<{ name: string; value: string; options?: any }>) {
-        cookiesToSet.forEach(({ name, value, options }) => {
-          try { cookieStore.set(name, value, options); } catch {}
-        });
+      getAll() {
+        return cookieStore.getAll().map((cookie) => ({
+          name: cookie.name,
+          value: cookie.value,
+        }));
+      },
+      setAll(cookiesToSet) {
+        try {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            cookieStore.set(name, value, options);
+          });
+        } catch (error) {
+          // El middleware o server components a veces no pueden setear cookies
+        }
       },
     },
   });
