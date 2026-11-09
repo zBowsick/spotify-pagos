@@ -28,6 +28,7 @@ interface MemberDashboardData {
   payments_sent: PaymentSent[];
   coverage: Coverage[];
   allocations_received: AllocationReceived[];
+  all_members: { id: string; name: string }[];
 }
 
 export default function MemberDashboard() {
@@ -207,7 +208,7 @@ export default function MemberDashboard() {
                       ))}
                     </Td>
                     <Td>{p.receipt_path ? (
-                      <Button variant="ghost" size="sm" onClick={() => setReceiptModal({ paymentId: p.id, paymentName: `${formatCOP(p.amount_cop)} - ${formatDate(p.paid_on)}` })}>Ver</Button>
+                      <Button variant="ghost" size="sm" onClick={() => window.open(`/api/receipts/${encodeURIComponent(p.receipt_path!)}`, '_blank')}>Ver</Button>
                     ) : (
                       <Button variant="ghost" size="sm" onClick={() => setReceiptModal({ paymentId: p.id, paymentName: `${formatCOP(p.amount_cop)} - ${formatDate(p.paid_on)}` })}>Subir</Button>
                     )}</Td>
@@ -226,7 +227,7 @@ export default function MemberDashboard() {
 
       {/* Cobertura personal */}
       <Card>
-        <CardHeader><CardTitle>Mi cobertura ({coverage.filter((c: Coverage) => !c.revoked_at).length} meses activos)</CardTitle></CardHeader>
+        <CardHeader><CardTitle>Mi cobertura ({(coverage || []).filter((c: Coverage) => !c?.revoked_at).length} meses activos)</CardTitle></CardHeader>
         <CardContent className="pt-0">
           {coverage.length === 0 ? (
             <EmptyState title="Sin cobertura" description="Cuando se apruebe un pago que te cubra, aparecerá aquí." />
@@ -286,7 +287,7 @@ export default function MemberDashboard() {
             <label className="block text-sm font-medium mb-2">Para quién y cuántos meses</label>
             <AllocationEditor
               allocations={submitForm.allocations}
-              members={(data?.payments_sent || []).flatMap((p: PaymentSent) => p.allocations || []).map((a: Allocation) => a.beneficiaryId)}
+              members={data?.all_members || []}
               onChange={allocs => setSubmitForm({...submitForm, allocations: allocs})}
             />
           </div>
@@ -313,9 +314,8 @@ export default function MemberDashboard() {
   );
 }
 
-function AllocationEditor({ allocations, onChange, members }: { allocations: { beneficiaryId: string; months: number }[]; onChange: (a: { beneficiaryId: string; months: number }[]) => void; members: string[] }) {
+function AllocationEditor({ allocations, onChange, members }: { allocations: { beneficiaryId: string; months: number }[]; onChange: (a: { beneficiaryId: string; months: number }[]) => void; members: { id: string; name: string }[] }) {
   const [rows, setRows] = useState(allocations.length ? allocations : [{ beneficiaryId: '', months: 1 }]);
-  const allMembers = Array.from(new Set(members)).filter(Boolean);
 
   function updateRow(i: number, field: 'beneficiaryId' | 'months', value: string | number) {
     const next = [...rows];
@@ -337,7 +337,7 @@ function AllocationEditor({ allocations, onChange, members }: { allocations: { b
             className="flex-1"
           >
             <option value="">Selecciona integrante</option>
-            {allMembers.map(m => <option key={m} value={m}>{m}</option>)}
+            {members.map(m => <option key={m.id} value={m.id}>{m.name}</option>)}
           </Select>
           <Input type="number" min="1" value={r.months} onChange={(e: ChangeEvent<HTMLInputElement>) => updateRow(i, 'months', e.target.value)} className="w-24" />
           {rows.length > 1 && <Button variant="ghost" size="sm" onClick={() => removeRow(i)}>✕</Button>}

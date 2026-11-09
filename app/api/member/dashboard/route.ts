@@ -12,7 +12,13 @@ export async function GET() {
   const { data, error } = await sb.rpc('member_dashboard', { p_member_id: member.id });
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  return NextResponse.json(data);
+  // Obtener todos los integrantes para el dropdown de asignaciones
+  const { data: allMembers } = await sb.from('members').select('id, name').order('name');
+
+  return NextResponse.json({
+    ...data,
+    all_members: allMembers || []
+  });
 }
 
 // Permitir que el navegador cachee la respuesta por 10 minutos
