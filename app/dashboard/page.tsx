@@ -110,7 +110,12 @@ export default function MemberDashboard() {
   if (error) return <Alert variant="error">{error}</Alert>;
   if (!data) return null;
 
-  const { member, payments_sent = [], coverage = [], allocations_received = [] } = data || {};
+  const member = data?.member;
+  const payments_sent = data?.payments_sent || [];
+  const coverage = data?.coverage || [];
+  const allocations_received = data?.allocations_received || [];
+
+  if (!member) return <Alert variant="error">No se encontró información del integrante</Alert>;
 
   // Determine status
   const today = new Date();
@@ -120,7 +125,7 @@ export default function MemberDashboard() {
     return `${get('year')}-${get('month')}`;
   };
   const currentPeriod = periodKey(today);
-  const coveredPeriods = new Set(coverage.filter((c: Coverage) => !c.revoked_at).map((c: Coverage) => c.period));
+  const coveredPeriods = new Set((coverage || []).filter((c: Coverage) => !c?.revoked_at).map((c: Coverage) => c.period));
   const startMonth = member.start_month;
   let status: 'AL_DIA' | 'PENDIENTE' | 'ATRASADO' = 'AL_DIA';
   let nextDue = currentPeriod;
@@ -281,7 +286,7 @@ export default function MemberDashboard() {
             <label className="block text-sm font-medium mb-2">Para quién y cuántos meses</label>
             <AllocationEditor
               allocations={submitForm.allocations}
-              members={data!.payments_sent.flatMap((p: PaymentSent) => p.allocations || []).map((a: Allocation) => a.beneficiaryId)}
+              members={(data?.payments_sent || []).flatMap((p: PaymentSent) => p.allocations || []).map((a: Allocation) => a.beneficiaryId)}
               onChange={allocs => setSubmitForm({...submitForm, allocations: allocs})}
             />
           </div>
