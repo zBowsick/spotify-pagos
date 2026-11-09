@@ -51,6 +51,10 @@ export default function MemberDashboard() {
   async function fetchData() {
     try {
       const res = await fetch('/api/member/dashboard', { cache: 'no-store' });
+      if (res.status === 401) {
+        window.location.href = '/auth/login';
+        return;
+      }
       if (!res.ok) throw new Error(await res.text());
       setData(await res.json());
     } catch (e) { setError(e instanceof Error ? e.message : 'Error al cargar'); }
