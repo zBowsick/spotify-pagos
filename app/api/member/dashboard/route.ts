@@ -14,3 +14,6 @@ export async function GET() {
 
   return NextResponse.json(data);
 }
+
+// Permitir que el navegador cachee la respuesta por 10 minutos
+export const revalidate = 600;
