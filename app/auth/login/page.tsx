@@ -20,6 +20,7 @@ export default function LoginPage() {
 function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,6 +30,7 @@ function LoginForm() {
     setLoading(true);
     const sb = getSupabaseBrowser();
     const { data, error } = await sb.auth.signInWithPassword({ email, password });
+    console.log('Login attempt:', { data, error });
     setLoading(false);
     if (error) {
       setError(error.message);
@@ -60,7 +62,26 @@ function LoginForm() {
       </div>
       <div>
         <label htmlFor="password">Contraseña</label>
-        <input id="password" type="password" className="input" value={password} onChange={e => setPassword(e.target.value)} required autoComplete="current-password" disabled={loading} />
+        <div className="relative flex items-center">
+          <input
+            id="password"
+            type={showPassword ? "text" : "password"}
+            className="input pr-10 w-full"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+            autoComplete="current-password"
+            disabled={loading}
+          />
+          <button
+            type="button"
+            className="absolute right-3 text-muted hover:text-white text-sm"
+            onClick={() => setShowPassword(!showPassword)}
+            tabIndex={-1}
+          >
+            {showPassword ? "Ocultar" : "Ver"}
+          </button>
+        </div>
       </div>
       <button type="submit" className="btn btn-primary w-full" disabled={loading}>
         {loading ? <span className="spinner" /> : 'Entrar'}
