@@ -28,17 +28,22 @@ function LoginForm() {
     e.preventDefault();
     setError(null);
     setLoading(true);
-    const sb = getSupabaseBrowser();
-    const { data, error } = await sb.auth.signInWithPassword({ email, password });
-    console.log('Login attempt:', { data, error });
-    setLoading(false);
-    if (error) {
-      setError(error.message);
-      return;
+    try {
+      const sb = getSupabaseBrowser();
+      const { data, error } = await sb.auth.signInWithPassword({ email, password });
+      console.log('Login attempt:', { data, error });
+      setLoading(false);
+      if (error) {
+        setError(error.message);
+        return;
+      }
+      await new Promise(r => setTimeout(r, 800));
+      window.location.href = '/dashboard';
+    } catch (err: any) {
+      console.error('Login error:', err);
+      setError(err.message || 'Error inesperado');
+      setLoading(false);
     }
-    // Esperar a que las cookies se guarden antes de redirigir
-    await new Promise(r => setTimeout(r, 800));
-    window.location.href = '/dashboard';
   }
 
   async function handleMagicLink(e: FormEvent) {
@@ -75,7 +80,7 @@ function LoginForm() {
           />
           <button
             type="button"
-            className="absolute right-3 text-white hover:text-gray-300"
+            className="absolute right-3 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
             onClick={() => setShowPassword(!showPassword)}
             tabIndex={-1}
             aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
