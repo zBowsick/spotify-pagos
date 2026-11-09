@@ -75,11 +75,11 @@ function LoginForm() {
           />
           <button
             type="button"
-            className="absolute right-3 text-muted hover:text-white text-sm"
+            className="absolute right-3 text-white font-medium bg-secondary px-2 py-1 rounded text-xs hover:bg-neutral"
             onClick={() => setShowPassword(!showPassword)}
             tabIndex={-1}
           >
-            {showPassword ? "Ocultar" : "Ver"}
+            {showPassword ? "🙈 Ocultar" : "👁️ Ver"}
           </button>
         </div>
       </div>
