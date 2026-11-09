@@ -47,7 +47,18 @@ export default function MemberDashboard() {
 
   const [receiptModal, setReceiptModal] = useState<{ paymentId: string; paymentName: string } | null>(null);
   const [receiptFile, setReceiptFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [receiptLoading, setReceiptLoading] = useState(false);
+
+  useEffect(() => {
+    if (!receiptFile) {
+      setPreviewUrl(null);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(receiptFile);
+    setPreviewUrl(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [receiptFile]);
 
   async function fetchData() {
     try {
@@ -298,14 +309,24 @@ export default function MemberDashboard() {
         </form>
       </Modal>
 
-      <Modal open={!!receiptModal} onClose={() => { setReceiptModal(null); setReceiptFile(null); }} title={`Comprobante: ${receiptModal?.paymentName}`}>
+      <Modal open={!!receiptModal} onClose={() => { setReceiptModal(null); setReceiptFile(null); setPreviewUrl(null); }} title={`Comprobante: ${receiptModal?.paymentName}`}>
         <form onSubmit={handleUploadReceipt} className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1.5">Archivo (JPG, PNG, WebP, PDF · máx 5 MB)</label>
             <input type="file" accept="image/jpeg,image/png,image/webp,application/pdf" onChange={(e: ChangeEvent<HTMLInputElement>) => setReceiptFile(e.target.files?.[0] || null)} className="input" />
           </div>
+          {previewUrl && (
+            <div className="mt-3 border rounded p-2 bg-background flex flex-col items-center">
+              <p className="text-xs text-muted mb-2">Vista previa:</p>
+              {receiptFile?.type.startsWith('image/') ? (
+                <img src={previewUrl} alt="Vista previa" className="max-h-48 rounded object-contain shadow" />
+              ) : (
+                <p className="text-sm font-medium">📄 {receiptFile?.name}</p>
+              )}
+            </div>
+          )}
           <div className="flex justify-end gap-2 pt-2">
-            <Button type="button" variant="secondary" onClick={() => { setReceiptModal(null); setReceiptFile(null); }}>Cancelar</Button>
+            <Button type="button" variant="secondary" onClick={() => { setReceiptModal(null); setReceiptFile(null); setPreviewUrl(null); }}>Cancelar</Button>
             <Button type="submit" loading={receiptLoading} disabled={!receiptFile}>Subir</Button>
           </div>
         </form>
