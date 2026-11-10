@@ -219,7 +219,7 @@ export default function MemberDashboard() {
                       ))}
                     </Td>
                     <Td>{p.receipt_path ? (
-                      <Button variant="ghost" size="sm" onClick={() => window.open(`/api/receipts/${encodeURIComponent(p.receipt_path!)}`, '_blank')}>Ver</Button>
+                      <Button variant="ghost" size="sm" onClick={() => window.open(`/api/receipts/${p.receipt_path}`, '_blank')}>Ver</Button>
                     ) : (
                       <Button variant="ghost" size="sm" onClick={() => setReceiptModal({ paymentId: p.id, paymentName: `${formatCOP(p.amount_cop)} - ${formatDate(p.paid_on)}` })}>Subir</Button>
                     )}</Td>
