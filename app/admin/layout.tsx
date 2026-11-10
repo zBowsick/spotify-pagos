@@ -13,7 +13,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <div className="min-h-screen">
-      <header className="border-b border-border bg-card sticky top-0 z-10">
+      <header className="glass sticky top-4 mx-4 my-2 z-10 rounded-2xl">
         <div className="container flex items-center justify-between h-16">
           <h1 className="text-xl font-semibold">Panel de Administración</h1>
           <nav className="flex items-center gap-4">
