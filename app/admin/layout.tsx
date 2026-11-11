@@ -15,12 +15,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     <div className="min-h-screen">
       <header className="glass sticky top-4 mx-4 my-2 z-10 rounded-2xl">
         <div className="container flex items-center justify-between h-16">
-          <h1 className="text-xl font-semibold">Panel de Administración</h1>
+          <h1 className="text-xl font-semibold text-white/95 tracking-wide">Panel de Administración</h1>
           <nav className="flex items-center gap-4">
-            <span className="text-sm text-muted">{member.name} (Admin)</span>
-            <a href="/dashboard" className="btn btn-ghost text-sm">Ver como miembro</a>
+            <span className="text-sm text-white/55 font-light tracking-wide">{member.name} (Admin)</span>
+            <a href="/dashboard" className="btn btn-ghost text-sm text-white/70 hover:text-white/95">Ver como miembro</a>
             <form action={async () => { 'use server'; const sb = await getSupabaseServer(); await sb.auth.signOut(); }} method="POST">
-              <button type="submit" className="btn btn-ghost text-sm">Salir</button>
+              <button type="submit" className="btn btn-ghost text-sm text-white/70 hover:text-white/95">Salir</button>
             </form>
           </nav>
         </div>

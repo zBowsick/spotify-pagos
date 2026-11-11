@@ -17,11 +17,11 @@ export default async function DashboardLayout({ children }: { children: React.Re
     <div className="min-h-screen">
       <header className="glass sticky top-4 mx-4 my-2 z-10 rounded-2xl">
         <div className="container flex items-center justify-between h-16">
-          <h1 className="text-xl font-semibold">Spotify Compartido</h1>
+          <h1 className="text-xl font-semibold text-white/95 tracking-wide">Spotify Compartido</h1>
           <nav className="flex items-center gap-4">
-            <span className="text-sm text-muted">{member.name}</span>
+            <span className="text-sm text-white/55 font-light tracking-wide">{member.name}</span>
             <form action={async () => { 'use server'; const sb = await getSupabaseServer(); await sb.auth.signOut(); }} method="POST">
-              <button type="submit" className="btn btn-ghost text-sm">Salir</button>
+              <button type="submit" className="btn btn-ghost text-sm text-white/70 hover:text-white/95">Salir</button>
             </form>
           </nav>
         </div>

@@ -16,7 +16,6 @@ export default function RegisterPage() {
   useEffect(() => {
     async function loadAvailableMembers() {
       const sb = getSupabaseBrowser();
-      // Solo listar miembros que aún no tienen usuario vinculado
       const { data } = await sb.from('members').select('id, name').is('auth_user_id', null).order('name');
       setMembers(data || []);
       setLoading(false);
@@ -35,10 +34,8 @@ export default function RegisterPage() {
 
     if (authErr) { setError(authErr.message); setSubmitting(false); return; }
 
-    // Esperar a que la sesión se establezca
     await new Promise(r => setTimeout(r, 500));
 
-    // Vincular cuenta
     const { error: claimErr } = await sb.rpc('claim_member', { p_member_id: selectedMember });
 
     if (claimErr) {
@@ -52,18 +49,40 @@ export default function RegisterPage() {
   if (loading) return <Loading />;
 
   return (
-    <main className="container max-w-md py-12">
-      <h1 className="text-2xl font-bold mb-6">Registro de nuevo integrante</h1>
-      <form onSubmit={handleRegister} className="card p-6 space-y-4">
-        {error && <Alert variant="error">{error}</Alert>}
-        <Input label="Email" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
-        <Input label="Contraseña" type="password" value={password} onChange={e => setPassword(e.target.value)} required />
-        <Select label="Selecciona tu nombre" value={selectedMember} onChange={e => setSelectedMember(e.target.value)} required>
-          <option value="">-- Elige quién eres --</option>
-          {members.map(m => <option key={m.id} value={m.id}>{m.name}</option>)}
-        </Select>
-        <Button type="submit" loading={submitting} className="w-full">Registrarse</Button>
-      </form>
+    <main className="min-h-screen flex items-center justify-center p-6">
+      <div className="w-full max-w-[420px]">
+        <div className="text-center mb-10">
+          <h1 className="text-4xl font-bold tracking-tight text-white/95">Spotify Compartido</h1>
+          <p className="text-white/55 mt-3 text-base font-light tracking-wide">Registro de nuevo integrante</p>
+        </div>
+        <div className="glass rounded-[32px] p-8 shadow-[0_30px_60px_rgba(0,0,0,0.5)]">
+          <form onSubmit={handleRegister} className="space-y-5">
+            {error && <Alert variant="error">{error}</Alert>}
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-white/60 mb-2 tracking-wide">Email</label>
+              <Input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
+            </div>
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-white/60 mb-2 tracking-wide">Contraseña</label>
+              <Input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+            </div>
+            <div>
+              <label htmlFor="member" className="block text-sm font-medium text-white/60 mb-2 tracking-wide">Selecciona tu nombre</label>
+              <select
+                id="member"
+                value={selectedMember}
+                onChange={e => setSelectedMember(e.target.value)}
+                required
+                className="select w-full"
+              >
+                <option value="">-- Elige quién eres --</option>
+                {members.map(m => <option key={m.id} value={m.id}>{m.name}</option>)}
+              </select>
+            </div>
+            <Button type="submit" loading={submitting} className="w-full">Registrarse</Button>
+          </form>
+        </div>
+      </div>
     </main>
   );
 }

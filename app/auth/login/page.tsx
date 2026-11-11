@@ -5,11 +5,11 @@ import { getSupabaseBrowser } from "@/lib/supabase";
 
 export default function LoginPage() {
   return (
-    <main className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold">Spotify Compartido</h1>
-          <p className="text-muted mt-2">Inicia sesión para gestionar tus pagos</p>
+    <main className="min-h-screen flex items-center justify-center p-6">
+      <div className="w-full max-w-[420px]">
+        <div className="text-center mb-10">
+          <h1 className="text-4xl font-bold tracking-tight text-white/95">Spotify Compartido</h1>
+          <p className="text-white/55 mt-3 text-base font-light tracking-wide">Inicia sessión para gestionar tus pagos</p>
         </div>
         <LoginForm />
       </div>
@@ -59,50 +59,74 @@ function LoginForm() {
   }
 
   return (
-    <form className="card p-6 space-y-4" onSubmit={handleSubmit}>
-      {error && <div className="badge badge-danger text-sm p-3 text-center">{error}</div>}
-      <div>
-        <label htmlFor="email">Email</label>
-        <input id="email" type="email" className="input" value={email} onChange={e => setEmail(e.target.value)} required autoComplete="email" disabled={loading} />
-      </div>
-      <div>
-        <label htmlFor="password">Contraseña</label>
-        <div className="relative flex items-center">
+    <div className="glass rounded-[32px] p-8 shadow-[0_30px_60px_rgba(0,0,0,0.5)]">
+      <form onSubmit={handleSubmit} className="space-y-5">
+        {error && (
+          <div className="bg-red-500/15 border border-red-500/30 text-red-200 text-sm px-4 py-3 rounded-xl text-center">
+            {error}
+          </div>
+        )}
+        <div>
+          <label htmlFor="email" className="block text-sm font-medium text-white/60 mb-2 tracking-wide">Email</label>
           <input
-            id="password"
-            type={showPassword ? "text" : "password"}
-            className="input pr-10 w-full"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
+            id="email"
+            type="email"
+            className="input"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
             required
-            autoComplete="current-password"
+            autoComplete="email"
             disabled={loading}
           />
-          <button
-            type="button"
-            className="absolute right-3 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-            onClick={() => setShowPassword(!showPassword)}
-            tabIndex={-1}
-            aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
-          >
-            {showPassword ? (
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-            ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            )}
-          </button>
         </div>
-      </div>
-      <button type="submit" className="btn btn-primary w-full" disabled={loading}>
-        {loading ? <span className="spinner" /> : 'Entrar'}
-      </button>
-      <div className="text-center text-sm text-muted">o</div>
-      <button type="button" className="btn btn-secondary w-full" onClick={handleMagicLink} disabled={loading || !email}>
-        Enviar enlace mágico
-      </button>
-      <div className="text-center text-sm">
-        <a href="/auth/register" className="text-brand hover:underline">¿No tienes cuenta? Regístrate aquí</a>
-      </div>
-    </form>
+        <div>
+          <label htmlFor="password" className="block text-sm font-medium text-white/60 mb-2 tracking-wide">Contraseña</label>
+          <div className="relative flex items-center">
+            <input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              className="input pr-10 w-full"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              required
+              autoComplete="current-password"
+              disabled={loading}
+            />
+            <button
+              type="button"
+              className="absolute right-3 text-white/50 hover:text-white/90 transition-colors"
+              onClick={() => setShowPassword(!showPassword)}
+              tabIndex={-1}
+              aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+            >
+              {showPassword ? (
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              )}
+            </button>
+          </div>
+        </div>
+        <button
+          type="submit"
+          className="btn btn-primary w-full"
+          disabled={loading}
+        >
+          {loading ? <span className="spinner" /> : 'Entrar'}
+        </button>
+        <div className="text-center text-sm text-white/40 font-light">o</div>
+        <button
+          type="button"
+          className="btn btn-secondary w-full"
+          onClick={handleMagicLink}
+          disabled={loading || !email}
+        >
+          Enviar enlace mágico
+        </button>
+        <div className="text-center text-sm">
+          <a href="/auth/register" className="text-white/70 hover:text-white/95 transition-colors font-light tracking-wide">¿No tienes cuenta? Regístrate aquí</a>
+        </div>
+      </form>
+    </div>
   );
 }
