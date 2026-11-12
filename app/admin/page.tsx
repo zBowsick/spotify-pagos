@@ -241,8 +241,8 @@ export default function AdminDashboard() {
       {/* Header & Summary */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold">Panel de David</h1>
-          <p className="text-muted">Control total de pagos y coberturas</p>
+          <h1 className="text-3xl font-bold text-white/95 tracking-tight">Panel de David</h1>
+          <p className="text-white/50 font-light tracking-wide mt-1">Control total de pagos y coberturas</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Button variant="secondary" onClick={() => { setSettingsPrice(String(settings.monthly_price_cop || '')); setSettingsModal(true); }}>
@@ -254,16 +254,16 @@ export default function AdminDashboard() {
 
       {/* Resumen general */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
-        <Card><CardContent className="pt-2 pb-4 px-6"><p className="text-sm text-muted">Total recaudado (aprobado)</p><p className="text-3xl font-bold">{formatCOP(members.reduce((s, m) => s + m.approved_cop, 0))}</p></CardContent></Card>
-        <Card><CardContent className="pt-2 pb-4 px-6"><p className="text-sm text-muted">Comprobantes pendientes</p><p className="text-3xl font-bold text-warning">{pending_receipts}</p></CardContent></Card>
-        <Card><CardContent className="pt-2 pb-4 px-6"><p className="text-sm text-muted">Integrantes</p><p className="text-3xl font-bold">{members.length}</p></CardContent></Card>
-        <Card><CardContent className="pt-2 pb-4 px-6"><p className="text-sm text-muted">Pagos este mes</p><p className="text-3xl font-bold">{payments.filter(p => p.paid_on.startsWith(currentPeriod)).length}</p></CardContent></Card>
-        <Card><CardContent className="pt-2 pb-4 px-6"><p className="text-sm text-muted">Coberturas activas</p><p className="text-3xl font-bold">{coverage.length}</p></CardContent></Card>
+        <Card><CardContent className="pt-2 pb-4 px-6"><p className="text-sm text-white/50 font-light tracking-wide">Total recaudado (aprobado)</p><p className="text-3xl font-bold text-white/95">{formatCOP(members.reduce((s, m) => s + m.approved_cop, 0))}</p></CardContent></Card>
+        <Card><CardContent className="pt-2 pb-4 px-6"><p className="text-sm text-white/50 font-light tracking-wide">Comprobantes pendientes</p><p className="text-3xl font-bold text-warning">{pending_receipts}</p></CardContent></Card>
+        <Card><CardContent className="pt-2 pb-4 px-6"><p className="text-sm text-white/50 font-light tracking-wide">Integrantes</p><p className="text-3xl font-bold text-white/95">{members.length}</p></CardContent></Card>
+        <Card><CardContent className="pt-2 pb-4 px-6"><p className="text-sm text-white/50 font-light tracking-wide">Pagos este mes</p><p className="text-3xl font-bold text-white/95">{payments.filter(p => p.paid_on.startsWith(currentPeriod)).length}</p></CardContent></Card>
+        <Card><CardContent className="pt-2 pb-4 px-6"><p className="text-sm text-white/50 font-light tracking-wide">Coberturas activas</p><p className="text-3xl font-bold text-white/95">{coverage.length}</p></CardContent></Card>
       </div>
 
       {/* Estado de integrantes */}
       <Card>
-        <CardHeader><CardTitle>Estado de los 6 integrantes</CardTitle></CardHeader>
+        <CardHeader><CardTitle className="text-white/95">Estado de los 6 integrantes</CardTitle></CardHeader>
         <CardContent className="pt-0">
           <Table>
             <Thead><Tr><Th>Integrante</Th><Th>Rol</Th><Th>Desde</Th><Th>Meses asignados</Th><Th>Pagos recibidos</Th><Th>Recaudado</Th><Th>Aprobado</Th><Th>Estado</Th><Th>Próx. vencimiento</Th><Th>Acciones</Th></Tr></Thead>
@@ -320,7 +320,7 @@ export default function AdminDashboard() {
       {/* Pagos */}
       <Card>
         <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-          <CardTitle>Pagos ({filtered.length} de {payments.length})</CardTitle>
+          <CardTitle className="text-white/95">Pagos ({filtered.length} de {payments.length})</CardTitle>
           <div className="flex gap-2">
             <Select value={sort.key} onChange={e => setSort({...sort, key: e.target.value})} className="w-auto">
               <option value="submitted_at">Enviado</option>
@@ -340,38 +340,30 @@ export default function AdminDashboard() {
             <Table>
               <Thead>
                 <Tr>
-                  <Th onClick={() => setSort({key: 'submitted_at', dir: sort.key==='submitted_at' && sort.dir==='asc'?'desc':'asc'})} style={{cursor:'pointer'}}>
-                    Enviado {sort.key==='submitted_at' && (sort.dir==='asc'?'↑':'↓')}
-                  </Th>
-                  <Th>Pagador</Th>
-                  <Th onClick={() => setSort({key: 'paid_on', dir: sort.key==='paid_on' && sort.dir==='asc'?'desc':'asc'})} style={{cursor:'pointer'}}>
-                    Fecha pago {sort.key==='paid_on' && (sort.dir==='asc'?'↑':'↓')}
-                  </Th>
-                  <Th onClick={() => setSort({key: 'amount_cop', dir: sort.key==='amount_cop' && sort.dir==='asc'?'desc':'asc'})} style={{cursor:'pointer'}}>
-                    Importe {sort.key==='amount_cop' && (sort.dir==='asc'?'↑':'↓')}
-                  </Th>
-                  <Th>Referencia</Th>
-                  <Th onClick={() => setSort({key: 'status', dir: sort.key==='status' && sort.dir==='asc'?'desc':'asc'})} style={{cursor:'pointer'}}>
-                    Estado {sort.key==='status' && (sort.dir==='asc'?'↑':'↓')}
-                  </Th>
-                  <Th>Revisado por</Th>
-                  <Th>Sin asignar</Th>
-                  <Th>Asignaciones</Th>
-                  <Th>Comprobante</Th>
-                  <Th>Acciones</Th>
+                  <Th onClick={() => setSort({key: 'submitted_at', dir: sort.key==='submitted_at' && sort.dir==='asc'?'desc':'asc'})} style={{cursor:'pointer'}} className="text-white/50 font-medium">Enviado {sort.key==='submitted_at' && (sort.dir==='asc'?'↑':'↓')}</Th>
+                  <Th className="text-white/50 font-medium">Pagador</Th>
+                  <Th onClick={() => setSort({key: 'paid_on', dir: sort.key==='paid_on' && sort.dir==='asc'?'desc':'asc'})} style={{cursor:'pointer'}} className="text-white/50 font-medium">Fecha pago {sort.key==='paid_on' && (sort.dir==='asc'?'↑':'↓')}</Th>
+                  <Th onClick={() => setSort({key: 'amount_cop', dir: sort.key==='amount_cop' && sort.dir==='asc'?'desc':'asc'})} style={{cursor:'pointer'}} className="text-white/50 font-medium">Importe {sort.key==='amount_cop' && (sort.dir==='asc'?'↑':'↓')}</Th>
+                  <Th className="text-white/50 font-medium">Referencia</Th>
+                  <Th onClick={() => setSort({key: 'status', dir: sort.key==='status' && sort.dir==='asc'?'desc':'asc'})} style={{cursor:'pointer'}} className="text-white/50 font-medium">Estado {sort.key==='status' && (sort.dir==='asc'?'↑':'↓')}</Th>
+                  <Th className="text-white/50 font-medium">Revisado por</Th>
+                  <Th className="text-white/50 font-medium">Sin asignar</Th>
+                  <Th className="text-white/50 font-medium">Asignaciones</Th>
+                  <Th className="text-white/50 font-medium">Comprobante</Th>
+                  <Th className="text-white/50 font-medium">Acciones</Th>
                 </Tr>
               </Thead>
               <Tbody>
                 {filtered.map(p => (
                   <Tr key={p.id}>
-                    <Td>{formatDate(p.submitted_at.split('T')[0])} {formatDate(p.submitted_at.split('T')[1]?.split('.')[0] || '')}</Td>
-                    <Td>{p.payer_name}</Td>
-                    <Td>{formatDate(p.paid_on)}</Td>
-                    <Td>{formatCOP(p.amount_cop)}</Td>
-                    <Td>{p.reference || '—'}</Td>
+                    <Td className="text-white/85 font-light">{formatDate(p.submitted_at.split('T')[0])} {formatDate(p.submitted_at.split('T')[1]?.split('.')[0] || '')}</Td>
+                    <Td className="text-white/85 font-light">{p.payer_name}</Td>
+                    <Td className="text-white/85 font-light">{formatDate(p.paid_on)}</Td>
+                    <Td className="text-white/85 font-light">{formatCOP(p.amount_cop)}</Td>
+                    <Td className="text-white/70 font-light">{p.reference || '—'}</Td>
                     <Td><Badge variant={paymentStatusVariant(p.status)}>{p.status}</Badge></Td>
-                    <Td>{p.reviewer_name || '—'}</Td>
-                    <Td>{p.unassigned_cop > 0 ? formatCOP(p.unassigned_cop) : '—'}</Td>
+                    <Td className="text-white/70 font-light">{p.reviewer_name || '—'}</Td>
+                    <Td className="text-white/70 font-light">{p.unassigned_cop > 0 ? formatCOP(p.unassigned_cop) : '—'}</Td>
                     <Td>
                       {(p.allocations || []).map((a, idx) => (
                         <Badge key={`${a.beneficiaryId}-${a.months}-${idx}`} variant="neutral" className="mr-1 mb-1">{a.beneficiaryId}: {a.months}m</Badge>
@@ -381,7 +373,7 @@ export default function AdminDashboard() {
                       {p.receipt_path ? (
                         <Button variant="ghost" size="sm" onClick={() => window.open(`/api/receipts/${p.receipt_path}`, '_blank')}>Ver</Button>
                       ) : (
-                        <span className="text-muted text-sm">Sin adjuntar</span>
+                        <span className="text-white/40 text-sm font-light">Sin adjuntar</span>
                       )}
                     </Td>
                     <Td className="flex gap-1">
@@ -405,7 +397,7 @@ export default function AdminDashboard() {
 
       {/* Cobertura completa */}
       <Card>
-        <CardHeader><CardTitle>Cobertura completa ({coverage.length} periodos activos)</CardTitle></CardHeader>
+        <CardHeader><CardTitle className="text-white/95">Cobertura completa ({coverage.length} periodos activos)</CardTitle></CardHeader>
         <CardContent className="pt-0">
           {coverage.length === 0 ? (
             <EmptyState title="Sin coberturas activas" />
@@ -432,7 +424,7 @@ export default function AdminDashboard() {
       {/* Modals */}
       <Modal open={settingsModal} onClose={() => setSettingsModal(false)} title="Configurar precio mensual">
         <form onSubmit={handleSettingsSubmit} className="space-y-4">
-          <Input label="Precio mensual (COP)" type="number" min="1" step="100" value={settingsPrice} onChange={e => setSettingsPrice(e.target.value)} required />
+          <Input label="Precio mensual (COP)" type="number" min="1" step="1" value={settingsPrice} onChange={e => setSettingsPrice(e.target.value)} required />
           <div className="flex justify-end gap-2 pt-2">
             <Button type="button" variant="secondary" onClick={() => setSettingsModal(false)}>Cancelar</Button>
             <Button type="submit" loading={settingsLoading}>Guardar</Button>
